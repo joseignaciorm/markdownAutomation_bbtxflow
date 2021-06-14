@@ -1,0 +1,110 @@
+[
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_3",
+        "ordinal_position": 0,
+        "parameter_mode": null,
+        "is_result": "YES",
+        "parameter_name": null,
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_3",
+        "ordinal_position": 1,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_1",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_3",
+        "ordinal_position": 2,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_2",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_2",
+        "ordinal_position": 0,
+        "parameter_mode": null,
+        "is_result": "YES",
+        "parameter_name": null,
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_2",
+        "ordinal_position": 1,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_1",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio_2",
+        "ordinal_position": 2,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_2",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio",
+        "ordinal_position": 0,
+        "parameter_mode": null,
+        "is_result": "YES",
+        "parameter_name": null,
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio",
+        "ordinal_position": 1,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_1",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    },
+    {
+        "specific_catalog": "carbon-scene-309911",
+        "specific_schema": "mydataset",
+        "specific_name": "fuzzball_ratio",
+        "ordinal_position": 2,
+        "parameter_mode": null,
+        "is_result": "NO",
+        "parameter_name": "str_2",
+        "data_type": "STRING",
+        "parameter_default": null,
+        "is_aggregate": null
+    }
+]
