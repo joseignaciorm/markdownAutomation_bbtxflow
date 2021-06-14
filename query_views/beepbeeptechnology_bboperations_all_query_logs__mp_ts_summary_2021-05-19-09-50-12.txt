@@ -1,0 +1,14 @@
+SELECT 
+COUNT(*) AS days,
+ROUND(SUM(mp_duration_hrs),1) AS mp_hrs,
+ROUND(SUM(mp_duration_hrs)/8,1) AS mp_standard_workdays,
+ROUND(SUM(mp_duration_hrs)/5,1) AS mp_bb_workdays,
+
+ROUND(SUM(ts_duration_hrs),1) AS ts_hrs,
+ROUND(SUM(ts_duration_hrs)/8,1) AS ts_standard_workdays,
+ROUND(SUM(ts_duration_hrs)/5,1) AS ts_bb_workdays,
+
+FROM `beepbeeptechnology.bboperations.all_query_logs__mp_ts` 
+WHERE query_date BETWEEN "2021-03-15" AND "2021-04-15"
+--AND mp_query_count > 10
+--AND ts_query_count > 10

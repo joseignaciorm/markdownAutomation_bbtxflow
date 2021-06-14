@@ -1,0 +1,83 @@
+WITH 
+tripscout_info_schema_jobs AS (
+SELECT *,
+EXTRACT(DATE from creation_time) AS query_date
+FROM `tripscout-151203`.`region-us`.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+WHERE EXTRACT(DATE from creation_time) > '2021-03-16'
+AND job_id LIKE "bquxjob%"
+AND user_email = 'jim@beepbeep.technology'
+),
+
+miles_info_schema_jobs AS (
+SELECT *,
+EXTRACT(DATE from creation_time) AS query_date
+FROM `miles-partnership-6751`.`region-us`.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+WHERE EXTRACT(DATE from creation_time) > '2021-03-16'
+AND job_id LIKE "bquxjob%"
+AND user_email = 'jim@beepbeep.technology'
+),
+
+all_info_schema_jobs AS (
+SELECT * FROM tripscout_info_schema_jobs
+UNION ALL
+SELECT * FROM miles_info_schema_jobs
+),
+
+all_job_stats AS (
+SELECT 
+query_date, project_id,
+COUNT(*) AS query_count,
+ROUND(SUM(total_bytes_billed)/1000000000,2) as total_bytes_billed_gb,
+MIN(creation_time) AS start_time,
+MAX(creation_time) AS end_time,
+ROUND(TIMESTAMP_DIFF(MAX(creation_time), MIN(creation_time), MINUTE)/60, 1) AS duration_hrs
+
+FROM all_info_schema_jobs
+GROUP BY query_date, project_id
+ORDER BY query_date DESC
+),
+
+stats_out AS (
+SELECT 
+query_date,
+FORMAT_DATE('%A', query_date) AS query_day_of_week,
+
+SUM(CASE WHEN project_id = 'tripscout-151203' THEN query_count ELSE 0 END) AS ts_query_count,
+SUM(CASE WHEN project_id = 'tripscout-151203' THEN total_bytes_billed_gb ELSE 0 END) AS ts_gb,
+MIN(CASE WHEN project_id = 'tripscout-151203' THEN start_time ELSE CURRENT_TIMESTAMP() END) AS ts_start,
+MIN(CASE WHEN project_id = 'tripscout-151203' THEN end_time ELSE CURRENT_TIMESTAMP() END) AS ts_end,
+
+SUM(CASE WHEN project_id = 'miles-partnership-6751' THEN query_count ELSE 0 END) AS mp_query_count,
+SUM(CASE WHEN project_id = 'miles-partnership-6751' THEN total_bytes_billed_gb ELSE 0 END) AS mp_gb,
+MIN(CASE WHEN project_id = 'miles-partnership-6751' THEN start_time ELSE CURRENT_TIMESTAMP() END) AS mp_start,
+MIN(CASE WHEN project_id = 'miles-partnership-6751' THEN end_time ELSE CURRENT_TIMESTAMP() END) AS mp_end,
+
+FROM all_job_stats
+GROUP BY query_date
+ORDER BY query_date DESC
+),
+
+all_job_stats_clean AS (
+
+SELECT
+query_date,
+query_day_of_week,
+ts_query_count,
+ts_gb,
+FORMAT_TIMESTAMP("%R", ts_start) AS ts_start,
+FORMAT_TIMESTAMP("%R", ts_end) AS ts_end,
+ROUND(TIMESTAMP_DIFF(ts_end, ts_start, MINUTE)/60,1) AS ts_duration_hrs,
+
+mp_query_count,
+mp_gb,
+FORMAT_TIMESTAMP("%R", mp_start) AS mp_start,
+FORMAT_TIMESTAMP("%R", mp_end) AS mp_end,
+ROUND(TIMESTAMP_DIFF(mp_end, mp_start, MINUTE)/60,1) AS mp_duration_hrs
+
+FROM stats_out
+)
+
+
+SELECT * FROM all_job_stats_clean
+WHERE query_date >= '2021-03-16'
+ORDER BY query_date DESC

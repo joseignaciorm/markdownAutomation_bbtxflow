@@ -1,0 +1,47 @@
+WITH info_schema_jobs AS (
+SELECT creation_time, job_id, user_email, job_type, total_slot_ms, destination_table, 
+referenced_tables AS referenced_tables_array, total_bytes_billed
+FROM `beepbeeptechnology.bboperations.info_schema_jobs` 
+),
+
+in_scope_flat AS (
+SELECT * EXCEPT(referenced_tables_array)
+FROM info_schema_jobs LEFT JOIN UNNEST(referenced_tables_array) AS referenced_tables 
+WHERE dataset_id LIKE "%4ward%"
+),
+
+in_scope_jobs_bytes AS (
+SELECT  
+SAFE_CAST(creation_time AS DATE) AS creation_date, 
+SAFE_CAST(creation_time AS TIMESTAMP) AS creation_timestamp,
+job_id, total_bytes_billed
+FROM in_scope_flat
+GROUP BY creation_time, job_id, total_bytes_billed
+),
+
+sum_by_day AS (
+
+SELECT 
+creation_date, 
+MIN(creation_timestamp) AS min_timestamp,
+MAX(creation_timestamp) AS max_timestamp,
+TIMESTAMP_DIFF(MAX(creation_timestamp),MIN(creation_timestamp), MINUTE) AS day_duration_min,
+COUNT(*) AS job_count,
+SUM(total_bytes_billed)/1000000000 AS total_gb_billed
+FROM in_scope_jobs_bytes
+GROUP BY creation_date
+ORDER BY creation_date
+),
+
+filtered_out AS (
+SELECT 
+'4ward_planning' AS client, creation_date, job_count, total_gb_billed, day_duration_min
+FROM sum_by_day
+WHERE job_count > 100 
+AND creation_date > '2021-01-01'
+AND total_gb_billed > 150
+)
+
+
+SELECT (SUM(day_duration_min)/60)/8
+FROM filtered_out
